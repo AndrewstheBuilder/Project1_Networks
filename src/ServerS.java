@@ -40,8 +40,13 @@ public class ServerS {
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
 				
-				System.out.println("Input is: " + input);
-				break; 
+				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+				String line = reader.readLine();  
+				
+				OutputStream output = socket.getOutputStream();
+				
+				
+				
 				//Runtime.getRuntime().exec();
 				
 				
