@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -40,15 +39,48 @@ public class ServerS {
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
 				
+				
 				BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 				String line = reader.readLine();  
 				
-				OutputStream output = socket.getOutputStream();
+				int inputInt = Integer.parseInt(line);
 				
+				/*
+				Date and Time - the date and time on the server
+				Uptime - how long the server has been running since last boot-up
+				Memory Use - the current memory usage on the server
+				Netstat - lists network connections on the server
+				Current Users - list of users currently connected to the server
+				Running Processes - list of programs currently running on the server
+				*/
 				
-				
+				switch (inputInt) {
+					case 1:
+						Runtime.getRuntime().exec("date");
+						break; 
+					case 2:
+						Runtime.getRuntime().exec("uptime");
+						break; 
+					case 3:
+						//THIS IS MEMORY USE 
+						Runtime.getRuntime().exec("free");
+						break; 
+					case 4:
+						Runtime.getRuntime().exec("netstat");
+						break; 
+					case 5:
+						Runtime.getRuntime().exec("who");
+						break; 
+					case 6:
+						Runtime.getRuntime().exec("ps");
+						break; 
+					}
 				//Runtime.getRuntime().exec();
 				
+				OutputStream output = socket.getOutputStream();
+				
+				socket.close();
+				serverSocket.close();
 				
 				
 				
