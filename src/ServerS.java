@@ -40,14 +40,16 @@ public class ServerS {
 			Socket socket = serverSocket.accept();
 			InputStream input = socket.getInputStream();
 			
-			
-			
+			System.out.println("Input is: " + input);
+			break; 
 			//Runtime.getRuntime().exec();
 			
 			
 			
 			
 		} while(true);
+		
+		
 		
 
 	}
