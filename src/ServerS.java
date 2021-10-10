@@ -1,16 +1,22 @@
+
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Scanner;
 
-public class ServerSide {
+
+public class ServerS {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 		String s = null;
-		// String inpAddr = null;
+		
 
 		int portNum = 0;
+		
 
+		
 		Scanner in = new Scanner(System.in);
 
 		while (true) {
@@ -27,6 +33,22 @@ public class ServerSide {
 
 		}
 		System.out.println(" Port is:  " + portNum);
+		
+		ServerSocket serverSocket = new ServerSocket(portNum);
+		
+		do {
+			Socket socket = serverSocket.accept();
+			InputStream input = socket.getInputStream();
+			
+			
+			
+			//Runtime.getRuntime().exec();
+			
+			
+			
+			
+		} while(true);
+		
 
 	}
 
