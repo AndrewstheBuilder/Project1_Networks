@@ -16,41 +16,41 @@ public class ServerS {
 		int portNum = 0;
 		
 
-		
-		Scanner in = new Scanner(System.in);
+		try {
+			Scanner in = new Scanner(System.in);
 
-		while (true) {
-			System.out.println("Which port to run (Between 1025-4998)");
+			while (true) {
+				System.out.println("Which port to run (Between 1025-4998)");
 
-			portNum = in.nextInt();
+				portNum = in.nextInt();
 
-			if (portNum <= 4998 && portNum >= 1025) {
-				break;
-			} else {
-				System.out.print("Number is not within bounds");
+				if (portNum <= 4998 && portNum >= 1025) {
+					break;
+				} else {
+					System.out.print("Number is not within bounds");
+				}
+				
+
 			}
+			System.out.println(" Port is:  " + portNum);
 			
-
-		}
-		System.out.println(" Port is:  " + portNum);
-		
-		ServerSocket serverSocket = new ServerSocket(portNum);
-		
-		do {
-			Socket socket = serverSocket.accept();
-			InputStream input = socket.getInputStream();
+			ServerSocket serverSocket = new ServerSocket(portNum);
 			
-			System.out.println("Input is: " + input);
-			break; 
-			//Runtime.getRuntime().exec();
-			
-			
-			
-			
-		} while(true);
-		
-		
-		
+			do {
+				Socket socket = serverSocket.accept();
+				InputStream input = socket.getInputStream();
+				
+				System.out.println("Input is: " + input);
+				break; 
+				//Runtime.getRuntime().exec();
+				
+				
+				
+				
+			} while(true);
+		} catch(Exception ex) {
+			System.out.println(ex);
+		}		
 
 	}
 
