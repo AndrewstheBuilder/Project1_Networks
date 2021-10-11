@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -32,9 +33,8 @@ public class ServerS {
 
 			}
 			System.out.println(" Port is:  " + portNum);
-			
-			ServerSocket serverSocket = new ServerSocket(portNum);
-			
+			InetAddress ipAddr = InetAddress.getByName("139.62.210.153");
+			ServerSocket serverSocket = new ServerSocket(portNum, 0, ipAddr);
 			do {
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
