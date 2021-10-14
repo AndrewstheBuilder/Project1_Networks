@@ -1,5 +1,5 @@
 import java.net.InetAddress;
-import java.net.ServerSocket;
+import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 
@@ -15,11 +15,10 @@ public class ClientS implements Runnable{
 		try {
 			Thread[] threads = new Thread[25];
 			Scanner in = new Scanner(System.in);
-			InetAddress ipAddr = InetAddress.getByName("139.62.210.153");
 			System.out.println("Enter Port Number:");
 			int port = in.nextInt();
-			int queued = 0;
-			ServerSocket serverSocket = new ServerSocket(port, queued, ipAddr);
+			String hostName = "CNT4505D.ccec.unf.edu";
+			Socket serverSocket = new Socket(hostName, port);
 			
 			int userCommand = -1;
 			while(true) {

@@ -34,7 +34,7 @@ public class ServerS {
 			}
 			System.out.println(" Port is:  " + portNum);
 			InetAddress ipAddr = InetAddress.getByName("139.62.210.153");
-			ServerSocket serverSocket = new ServerSocket(portNum, 0, ipAddr);
+			ServerSocket serverSocket = new ServerSocket(portNum);
 			do {
 				Socket socket = serverSocket.accept();
 				InputStream input = socket.getInputStream();
