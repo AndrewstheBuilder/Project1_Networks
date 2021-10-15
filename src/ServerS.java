@@ -37,6 +37,8 @@ public class ServerS {
 			ServerSocket serverSocket = new ServerSocket(portNum);
 			do {
 				Socket socket = serverSocket.accept();
+				System.out.println("New client connected");
+				
 				InputStream input = socket.getInputStream();
 				
 				
@@ -44,7 +46,7 @@ public class ServerS {
 				String line = reader.readLine();  
 				
 				int inputInt = Integer.parseInt(line);
-				
+				System.out.println("Command received(ServerSide):"+inputInt);
 				/*
 				Date and Time - the date and time on the server
 				Uptime - how long the server has been running since last boot-up
@@ -78,12 +80,10 @@ public class ServerS {
 				//Runtime.getRuntime().exec();
 				
 				OutputStream output = socket.getOutputStream();
-				
-				socket.close();
-				serverSocket.close();
-				
-				
-				
+	            PrintWriter writer = new PrintWriter(output, true);
+				writer.println("Wasup bro I am the server");
+				//socket.close();
+				//serverSocket.close();
 			} while(true);
 		} catch(Exception ex) {
 			System.out.println(ex);

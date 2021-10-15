@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.time.LocalDateTime;
@@ -5,6 +11,9 @@ import java.util.Scanner;
 
 public class ClientS implements Runnable{
 	public int command;
+	public static PrintWriter writer;
+	public static Socket socket;
+	
 	ClientS(int command){
 		this.command = command;
 	}
@@ -18,7 +27,9 @@ public class ClientS implements Runnable{
 			System.out.println("Enter Port Number:");
 			int port = in.nextInt();
 			String hostName = "CNT4505D.ccec.unf.edu";
-			Socket serverSocket = new Socket(hostName, port);
+			ClientS.socket = new Socket(hostName, port);
+			OutputStream output = ClientS.socket.getOutputStream();
+			ClientS.writer = new PrintWriter(output, true);
 			
 			int userCommand = -1;
 			while(true) {
@@ -42,8 +53,13 @@ public class ClientS implements Runnable{
 						
 					}
 				}
+				
 			}
-		} catch(Exception ex) {
+		} 
+		catch(IOException ex) {
+			System.out.println(ex);
+		}
+		catch(Exception ex) {
 			System.out.println(ex);
 		}
 
@@ -54,7 +70,16 @@ public class ClientS implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		System.out.println("Command received:"+ this.command);
+		try {
+			System.out.println("Command received(ClientSide):"+ this.command);
+			writer.println(this.command);
+			InputStream input = socket.getInputStream();
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+			System.out.println("Output received from server:"+reader.readLine());
+		} catch( Exception ex) {
+			System.out.println(ex);
+		}
+
 	}
 
 }
