@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Scanner;
 
 public class ClientS implements Runnable{
@@ -24,10 +25,18 @@ public class ClientS implements Runnable{
 		try {
 			Thread[] threads = new Thread[25];
 			Scanner in = new Scanner(System.in);
+			System.out.println("Enter host to connect to:");
+			InetAddress ipAddr = InetAddress.getByName(in.next());
 			System.out.println("Enter Port Number:");
 			int port = in.nextInt();
 			
+			int threadsRequired = -1;
 			int userCommand = -1;
+			double startTime;
+			double endTime;
+			double totalElapsedTime = 0;
+			double avgElapsedTime = 0;
+			
 			while(true) {
 				System.out.print("1.Date and Time\n"
 						+ "2.Uptime\n"
@@ -37,25 +46,35 @@ public class ClientS implements Runnable{
 						+ "6.Running Processes\n"
 						+ "7.Quit\n");
 				userCommand = in.nextInt();
+				while(userCommand < 1 || userCommand > 7) {
+					System.out.println("Command must be between 1-7");
+					userCommand = in.nextInt();
+				}
 				if(userCommand ==7 ) break;
-				System.out.println("How many times do you want to run this command?");
-				int threadsRequired = in.nextInt();
-				LocalDateTime startTime = LocalDateTime.now();
+				while(true) {
+					System.out.println("How many times do you want to run this command?");
+					threadsRequired = in.nextInt();
+					if(threadsRequired > 0 && threadsRequired < 26) break;
+					else System.out.println("Number of threads must be between (1-25)");
+				}
 				ClientS client = new ClientS(userCommand);
+				startTime = (new Date()).getTime();
 				for(int i = 0; i < threadsRequired; i++) {
-					String hostName = "CNT4505D.ccec.unf.edu";
-					ClientS.socket = new Socket(hostName, port);
+					ClientS.socket = new Socket(ipAddr, port);
 					OutputStream output = ClientS.socket.getOutputStream();
 					ClientS.writer = new PrintWriter(output, true);
 					threads[i] = new Thread(client);
 					threads[i].start();
-					while(threads[i].isAlive()) {
-						
-					}
+					threads[i].join();
 					ClientS.socket.close();
 				}
-				
+				endTime = (new Date()).getTime();
+				totalElapsedTime = endTime - startTime;
+				avgElapsedTime = (double)(totalElapsedTime/threadsRequired);
+				System.out.println("Total elapsed time = "+totalElapsedTime+"ms");
+				System.out.println("Average elapsed time = "+avgElapsedTime+"ms");
 			}
+			
 		} 
 		catch(IOException ex) {
 			System.out.println("Client exception:"+ex);
@@ -77,7 +96,6 @@ public class ClientS implements Runnable{
 			writer.println(this.command);
 			InputStream input = socket.getInputStream();
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-	        //System.out.println("OUTPUT FROM SERVER:");
 	        String temp = "";
 	        while((temp=reader.readLine()) != null) {
 	        	System.out.println(temp);

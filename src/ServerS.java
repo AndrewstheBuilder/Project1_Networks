@@ -18,13 +18,12 @@ public class ServerS {
 
 			while (true) {
 				System.out.println("Which port to run (Between 1025-4998)");
-
 				portNum = in.nextInt();
 
 				if (portNum <= 4998 && portNum >= 1025) {
 					break;
 				} else {
-					System.out.print("Number is not within bounds");
+					System.out.println("Number is not within bounds (1025-4998)");
 				}
 				
 
@@ -86,7 +85,7 @@ public class ServerS {
 
 	            // read the output from the command
 	            while ((temp=stdInput.readLine()) != null) {
-	            	outputBuffer += temp + "\n";
+	            	outputBuffer += "\n"+temp;
 	            }
 	            writer.println(outputBuffer);
 	            writer.close();
