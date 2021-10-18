@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.CharBuffer;
 import java.util.Scanner;
 
 
@@ -10,12 +11,8 @@ public class ServerS {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String s = null;
-		
-
 		int portNum = 0;
 		
-
 		try {
 			Scanner in = new Scanner(System.in);
 
@@ -32,12 +29,13 @@ public class ServerS {
 				
 
 			}
-			System.out.println(" Port is:  " + portNum);
-			InetAddress ipAddr = InetAddress.getByName("139.62.210.153");
+			System.out.println("Port is:  " + portNum);
 			ServerSocket serverSocket = new ServerSocket(portNum);
+			Process result;
 			do {
+				System.out.println("Waiting for new connection...");
 				Socket socket = serverSocket.accept();
-				System.out.println("New client connected");
+				System.out.println("New client connected:"+socket.getInetAddress());
 				
 				InputStream input = socket.getInputStream();
 				
@@ -46,7 +44,7 @@ public class ServerS {
 				String line = reader.readLine();  
 				
 				int inputInt = Integer.parseInt(line);
-				System.out.println("Command received(ServerSide):"+inputInt);
+				//System.out.println("Command received:"+inputInt);
 				/*
 				Date and Time - the date and time on the server
 				Uptime - how long the server has been running since last boot-up
@@ -58,35 +56,60 @@ public class ServerS {
 				
 				switch (inputInt) {
 					case 1:
-						Runtime.getRuntime().exec("date");
+						result = Runtime.getRuntime().exec("date");
 						break; 
 					case 2:
-						Runtime.getRuntime().exec("uptime");
+						result = Runtime.getRuntime().exec("uptime");
 						break; 
 					case 3:
 						//THIS IS MEMORY USE 
-						Runtime.getRuntime().exec("free");
+						result = Runtime.getRuntime().exec("free");
 						break; 
 					case 4:
-						Runtime.getRuntime().exec("netstat");
+						result = Runtime.getRuntime().exec("netstat");
 						break; 
 					case 5:
-						Runtime.getRuntime().exec("who");
+						result = Runtime.getRuntime().exec("who");
 						break; 
 					case 6:
-						Runtime.getRuntime().exec("ps");
-						break; 
+						result = Runtime.getRuntime().exec("ps");
+						break;
+					default:
+						result = Runtime.getRuntime().exec("");
+						break;
 					}
-				//Runtime.getRuntime().exec();
-				
+				BufferedReader stdInput = new BufferedReader(new InputStreamReader(result.getInputStream()));
+	            BufferedReader stdError = new BufferedReader(new InputStreamReader(result.getErrorStream()));
 				OutputStream output = socket.getOutputStream();
 	            PrintWriter writer = new PrintWriter(output, true);
-				writer.println("Wasup bro I am the server");
+	            //stdInput.read(outputBuffer);
+	            // read the output from the command
+//	            while ((temp=stdInput.readLine()) != null) {
+//	            	outputBuffer += temp;
+//	            	outputBuffer += "\n";
+//	            	//System.out.println(outputBuffer);
+//	            	
+//	            }
+	            Scanner s = new Scanner(result.getInputStream()).useDelimiter("\\A");
+	            String outputBuffer = s.hasNext() ? s.next() : "";
+	            writer.println(outputBuffer);
+	            
+//	            // read any errors from the attempted command
+//	            System.out.println("Here is the standard error of the command (if any):\n");
+//	            while ((outputBuffer = stdError.readLine()) != null) {
+//	                System.out.println(outputBuffer);
+//	            }
+	            //writer.println(result.toString());
+				//writer.println(result.getOutputStream().toString());
+				
+				//System.out.println(result.getErrorStream().toString()); 
+				
 				//socket.close();
 				//serverSocket.close();
 			} while(true);
 		} catch(Exception ex) {
-			System.out.println(ex);
+			System.out.println("Server exception: "+ex.getMessage());
+			ex.printStackTrace();
 		}		
 
 	}

@@ -26,16 +26,12 @@ public class ClientS implements Runnable{
 			Scanner in = new Scanner(System.in);
 			System.out.println("Enter Port Number:");
 			int port = in.nextInt();
-			String hostName = "CNT4505D.ccec.unf.edu";
-			ClientS.socket = new Socket(hostName, port);
-			OutputStream output = ClientS.socket.getOutputStream();
-			ClientS.writer = new PrintWriter(output, true);
 			
 			int userCommand = -1;
 			while(true) {
 				System.out.print("1.Date and Time\n"
 						+ "2.Uptime\n"
-						+ "3.Memory User\n"
+						+ "3.Memory Use\n"
 						+ "4.Netstat\n"
 						+ "5.Current Users\n"
 						+ "6.Running Processes\n"
@@ -47,20 +43,27 @@ public class ClientS implements Runnable{
 				LocalDateTime startTime = LocalDateTime.now();
 				ClientS client = new ClientS(userCommand);
 				for(int i = 0; i < threadsRequired; i++) {
+					String hostName = "CNT4505D.ccec.unf.edu";
+					ClientS.socket = new Socket(hostName, port);
+					OutputStream output = ClientS.socket.getOutputStream();
+					ClientS.writer = new PrintWriter(output, true);
 					threads[i] = new Thread(client);
 					threads[i].start();
 					while(threads[i].isAlive()) {
 						
 					}
+					ClientS.socket.close();
 				}
 				
 			}
 		} 
 		catch(IOException ex) {
-			System.out.println(ex);
+			System.out.println("Client exception:"+ex);
+			ex.printStackTrace();
 		}
 		catch(Exception ex) {
-			System.out.println(ex);
+			System.out.println("Client exception:"+ex);
+			ex.printStackTrace();
 		}
 
 		
@@ -71,11 +74,11 @@ public class ClientS implements Runnable{
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			System.out.println("Command received(ClientSide):"+ this.command);
 			writer.println(this.command);
 			InputStream input = socket.getInputStream();
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			System.out.println("Output received from server:"+reader.readLine());
+	        //System.out.println("OUTPUT FROM SERVER:");
+			System.out.println(reader.readLine());
 		} catch( Exception ex) {
 			System.out.println(ex);
 		}
