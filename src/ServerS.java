@@ -29,7 +29,7 @@ public class ServerS {
 				
 
 			}
-			System.out.println("Port is:  " + portNum);
+			System.out.println("Port is:" + portNum);
 			ServerSocket serverSocket = new ServerSocket(portNum);
 			Process result;
 			do {
@@ -44,7 +44,6 @@ public class ServerS {
 				String line = reader.readLine();  
 				
 				int inputInt = Integer.parseInt(line);
-				//System.out.println("Command received:"+inputInt);
 				/*
 				Date and Time - the date and time on the server
 				Uptime - how long the server has been running since last boot-up
@@ -80,32 +79,17 @@ public class ServerS {
 					}
 				BufferedReader stdInput = new BufferedReader(new InputStreamReader(result.getInputStream()));
 	            BufferedReader stdError = new BufferedReader(new InputStreamReader(result.getErrorStream()));
-				OutputStream output = socket.getOutputStream();
-	            PrintWriter writer = new PrintWriter(output, true);
-	            //stdInput.read(outputBuffer);
+	            OutputStream output = socket.getOutputStream();
+            	PrintWriter writer = new PrintWriter(output, true);
+	            String outputBuffer ="";
+	            String temp = "";
+
 	            // read the output from the command
-//	            while ((temp=stdInput.readLine()) != null) {
-//	            	outputBuffer += temp;
-//	            	outputBuffer += "\n";
-//	            	//System.out.println(outputBuffer);
-//	            	
-//	            }
-	            Scanner s = new Scanner(result.getInputStream()).useDelimiter("\\A");
-	            String outputBuffer = s.hasNext() ? s.next() : "";
+	            while ((temp=stdInput.readLine()) != null) {
+	            	outputBuffer += temp + "\n";
+	            }
 	            writer.println(outputBuffer);
-	            
-//	            // read any errors from the attempted command
-//	            System.out.println("Here is the standard error of the command (if any):\n");
-//	            while ((outputBuffer = stdError.readLine()) != null) {
-//	                System.out.println(outputBuffer);
-//	            }
-	            //writer.println(result.toString());
-				//writer.println(result.getOutputStream().toString());
-				
-				//System.out.println(result.getErrorStream().toString()); 
-				
-				//socket.close();
-				//serverSocket.close();
+	            writer.close();
 			} while(true);
 		} catch(Exception ex) {
 			System.out.println("Server exception: "+ex.getMessage());

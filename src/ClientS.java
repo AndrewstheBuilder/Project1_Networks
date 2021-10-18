@@ -78,7 +78,10 @@ public class ClientS implements Runnable{
 			InputStream input = socket.getInputStream();
 	        BufferedReader reader = new BufferedReader(new InputStreamReader(input));
 	        //System.out.println("OUTPUT FROM SERVER:");
-			System.out.println(reader.readLine());
+	        String temp = "";
+	        while((temp=reader.readLine()) != null) {
+	        	System.out.println(temp);
+	        }
 		} catch( Exception ex) {
 			System.out.println(ex);
 		}
