@@ -74,6 +74,7 @@ public class ServerS {
 					case 6:
 						Runtime.getRuntime().exec("ps");
 						break; 
+					case 7:
 					}
 				//Runtime.getRuntime().exec();
 				
