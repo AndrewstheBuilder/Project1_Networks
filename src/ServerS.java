@@ -43,6 +43,7 @@ public class ServerS {
 				String line = reader.readLine();  
 				
 				int inputInt = Integer.parseInt(line);
+				System.out.println("Command received:"+inputInt);
 				/*
 				Date and Time - the date and time on the server
 				Uptime - how long the server has been running since last boot-up
