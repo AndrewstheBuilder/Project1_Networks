@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.CharBuffer;
 import java.util.Scanner;
 
 
@@ -10,33 +11,31 @@ public class ServerS {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		String s = null;
-		
-
 		int portNum = 0;
 		
-
 		try {
 			Scanner in = new Scanner(System.in);
 
 			while (true) {
 				System.out.println("Which port to run (Between 1025-4998)");
-
 				portNum = in.nextInt();
 
 				if (portNum <= 4998 && portNum >= 1025) {
 					break;
 				} else {
-					System.out.print("Number is not within bounds");
+					System.out.println("Number is not within bounds (1025-4998)");
 				}
 				
 
 			}
-			System.out.println(" Port is:  " + portNum);
-			InetAddress ipAddr = InetAddress.getByName("139.62.210.153");
-			ServerSocket serverSocket = new ServerSocket(portNum, 0, ipAddr);
+			System.out.println("Port is:" + portNum);
+			ServerSocket serverSocket = new ServerSocket(portNum);
+			Process result;
 			do {
+				System.out.println("Waiting for new connection...");
 				Socket socket = serverSocket.accept();
+				System.out.println("New client connected:"+socket.getInetAddress());
+				
 				InputStream input = socket.getInputStream();
 				
 				
@@ -44,7 +43,7 @@ public class ServerS {
 				String line = reader.readLine();  
 				
 				int inputInt = Integer.parseInt(line);
-				
+				System.out.println("Command received:"+inputInt);
 				/*
 				Date and Time - the date and time on the server
 				Uptime - how long the server has been running since last boot-up
@@ -56,37 +55,45 @@ public class ServerS {
 				
 				switch (inputInt) {
 					case 1:
-						Runtime.getRuntime().exec("date");
+						result = Runtime.getRuntime().exec("date");
 						break; 
 					case 2:
-						Runtime.getRuntime().exec("uptime");
+						result = Runtime.getRuntime().exec("uptime");
 						break; 
 					case 3:
 						//THIS IS MEMORY USE 
-						Runtime.getRuntime().exec("free");
+						result = Runtime.getRuntime().exec("free");
 						break; 
 					case 4:
-						Runtime.getRuntime().exec("netstat");
+						result = Runtime.getRuntime().exec("netstat");
 						break; 
 					case 5:
-						Runtime.getRuntime().exec("who");
+						result = Runtime.getRuntime().exec("who");
 						break; 
 					case 6:
-						Runtime.getRuntime().exec("ps");
-						break; 
+						result = Runtime.getRuntime().exec("ps");
+						break;
+					default:
+						result = Runtime.getRuntime().exec("");
+						break;
 					}
-				//Runtime.getRuntime().exec();
-				
-				OutputStream output = socket.getOutputStream();
-				
-				socket.close();
-				serverSocket.close();
-				
-				
-				
+				BufferedReader stdInput = new BufferedReader(new InputStreamReader(result.getInputStream()));
+	            BufferedReader stdError = new BufferedReader(new InputStreamReader(result.getErrorStream()));
+	            OutputStream output = socket.getOutputStream();
+            	PrintWriter writer = new PrintWriter(output, true);
+	            String outputBuffer ="";
+	            String temp = "";
+
+	            // read the output from the command
+	            while ((temp=stdInput.readLine()) != null) {
+	            	outputBuffer += "\n"+temp;
+	            }
+	            writer.println(outputBuffer);
+	            writer.close();
 			} while(true);
 		} catch(Exception ex) {
-			System.out.println(ex);
+			System.out.println("Server exception: "+ex.getMessage());
+			ex.printStackTrace();
 		}		
 
 	}
