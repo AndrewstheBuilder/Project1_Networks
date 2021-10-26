@@ -30,7 +30,7 @@ public class ServerS {
 			}
 			System.out.println("Port is:" + portNum);
 			ServerSocket serverSocket = new ServerSocket(portNum);
-			Process result;
+			Process result = Runtime.getRuntime().exec("ls");
 			do {
 				System.out.println("Waiting for new connection...");
 				Socket socket = serverSocket.accept();
@@ -74,7 +74,7 @@ public class ServerS {
 						result = Runtime.getRuntime().exec("ps");
 						break;
 					default:
-						result = Runtime.getRuntime().exec("");
+						result = Runtime.getRuntime().exec("ls");
 						break;
 					}
 				BufferedReader stdInput = new BufferedReader(new InputStreamReader(result.getInputStream()));
