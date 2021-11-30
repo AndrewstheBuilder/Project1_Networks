@@ -10,14 +10,14 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Scanner;
 
-public class ClientS extends Thread{
+public class ClientMulti extends Thread{
 	Socket socket;
 	OutputStream output;
 	BufferedReader reader;
 	PrintWriter writer;
 	int command;
 	int threadNum;
-	ClientS(InetAddress address, int port, int threadNum, int command){
+	ClientMulti(InetAddress address, int port, int threadNum, int command){
 		try{
 			this.socket = new Socket(address, port);
 			this.output = socket.getOutputStream();
@@ -75,7 +75,7 @@ public class ClientS extends Thread{
 				
 				//intialize threads
 				for(int i = 0; i < threadsRequired; i++) {
-					ClientS clients = new ClientS(ipAddr, port, (i+1), userCommand);
+					ClientMulti clients = new ClientMulti(ipAddr, port, (i+1), userCommand);
 					threads[i] = new Thread(clients);
 				}
 				
