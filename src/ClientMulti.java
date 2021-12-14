@@ -35,7 +35,7 @@ public class ClientMulti extends Thread{
 		// TODO Auto-generated method stub
 		
 		try {
-			Thread[] threads = new Thread[25];
+			Thread[] threads = new Thread[100];
 			
 			Scanner in = new Scanner(System.in);
 			System.out.println("Enter host to connect to:");
@@ -69,8 +69,8 @@ public class ClientMulti extends Thread{
 				while(true) {
 					System.out.println("How many times do you want to run this command?");
 					threadsRequired = in.nextInt();
-					if(threadsRequired > 0 && threadsRequired < 26) break;
-					else System.out.println("Number of threads must be between (1-25)");
+					if(threadsRequired > 0 && threadsRequired < 101) break;
+					else System.out.println("Number of threads must be between (1-100)");
 				}
 				
 				//intialize threads
